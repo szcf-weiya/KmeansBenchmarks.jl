@@ -1,0 +1,49 @@
+name: CI
+
+on: [push]
+
+jobs:
+  docs:
+    name: Julia ${{ matrix.julia-version }} - ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04]
+        julia-version: ['1.11']
+        r-version: ['4.2.1']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.r-version }}
+      # actually it seems that without installing `libcurl4-openssl-dev`, there also exists a libcurl.so, but at `/lib/x86_64-linux-gnu/libcurl.so.4` instead of `/usr/lib/x86_64-linux-gnu/libcurl.so.4`
+      # for consistency with previous setting and also recommended at https://github.com/r-lib/actions/tree/v2/setup-r-dependencies, continue to install `libcurl4-openssl-dev`
+      - name: Install libcurl on Linux
+        if: runner.os == 'Linux'
+        run: sudo apt-get update -y && sudo apt-get install -y libcurl4-openssl-dev
+      - name: Install Dependencies for R
+        run: |
+          r = getOption("repos")
+          r["CRAN"] = "https://cloud.r-project.org/"
+          options(repos=r)
+          install.packages("ClusterR")
+          install.packages("maotai")
+        shell: sudo Rscript {0}
+
+      - name: Cache R library
+        uses: actions/cache@v3
+        with:
+          path: /opt/R/${{ matrix.r-version }}/lib/R/library
+          key: ${{ runner.os }}-R-${{ hashFiles('**/Project.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-R-
+
+      - uses: julia-actions/setup-julia@latest
+        with:
+          version: ${{ matrix.julia-version }}
+            
+      - uses: julia-actions/julia-docdeploy@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # If authenticating with GitHub Actions token
+          DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }} # If authenticating with SSH deploy key

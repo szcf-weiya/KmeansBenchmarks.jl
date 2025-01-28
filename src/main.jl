@@ -36,11 +36,27 @@ arr_data = (
 )
 
 function scripts()
-    res = benchmark(arr_data, arr_methods)
-    serialize("../res/2025-01-27-n1000-p2000-delta0.3-0.7.sil", res)
+    nrep = 10
+    res = [benchmark(arr_data, arr_methods) for _ in 1:nrep]
+    serialize("../res/2025-01-27-n1000-p2000-delta0.3-0.7-nrep$nrep.sil", res)
     df = DataFrame(hcat(repeat(collect(keys(arr_data)), inner=length(arr_methods)),
                         repeat(collect(keys(arr_methods)), outer=length(arr_data)),
                         vcat(res...)), ["data", "method", "Acc", "BSS/TSS", "Time"])
 
+    df = DataFrame(hcat(repeat(repeat(collect(keys(arr_data)), inner=length(arr_methods)), outer = nrep),
+                    repeat(repeat(collect(keys(arr_methods)), outer=length(arr_data)), outer = nrep),
+                    vcat([vcat(r...) for r in res]...)), ["data", "method", "Acc", "BSS/TSS", "Time"])
+
+    groupedboxplot([z[end-4:end] for z in string.(df[:, :data])], df[:, :Acc], group = string.(df[:, :method]), legend = :outerbottomright, 
+                size = (1600, 800),
+                xlab = "signal strength", ylab = "accuracy", title = "Gaussian (n = 1000, p = 2000)")
+
+    groupedboxplot([z[end-4:end] for z in string.(df[:, :data])], df[:, "BSS/TSS"], group = string.(df[:, :method]), legend = :outerbottomright, 
+                size = (1600, 800),
+                xlab = "signal strength", ylab = "BSS/TSS", title = "Gaussian (n = 1000, p = 2000)")
+
+    groupedboxplot([z[end-4:end] for z in string.(df[:, :data])], df[:, "Time"], group = string.(df[:, :method]), legend = :outerbottomright, 
+                size = (1600, 800),
+                xlab = "signal strength", ylab = "Time", title = "Gaussian (n = 1000, p = 2000)")
     #show(df, truncate=100,allrows=true)
 end
