@@ -2,3 +2,4 @@ res/
 Manifest.toml
 src/main.jl
 docs/build
+docs/src/benchmarks/

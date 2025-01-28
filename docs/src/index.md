@@ -2,6 +2,16 @@
 
 Clustering is a cornerstone of unsupervised machine learning, with the k-means algorithm standing as one of the most widely used methods for partitioning data into coherent groups. Its simplicity, interpretability, and adaptability have made it a staple in fields ranging from customer segmentation to bioinformatics. However, the performance and results of k-means can vary significantly depending on the implementation choices made by practitioners, including the software ecosystem (e.g., R, Julia, Python), the algorithmic variants employed (e.g., Lloyd’s algorithm, Hartigan-Wong, or scalable approximations like Mini-Batch k-means), and the initialization strategies (e.g., random seeding, k-means++, or density-based initialization). These choices impact not only computational efficiency but also the quality and stability of the resulting clusters.
 
-This project seeks to systematically benchmark and compare k-means implementations across different frameworks—focusing on R and Julia as representative languages for statistical computing and high-performance numerical analysis, respectively—while also evaluating the interplay between initialization methods and algorithmic variants. R, with its rich ecosystem of packages (e.g., `stats`, `ClusterR`), offers user-friendly tools optimized for statistical rigor, whereas Julia (particularly the package `Clustering`), leveraging its just-in-time (JIT) compilation and parallel computing capabilities, promises faster execution for large datasets. Beyond software comparisons, the study will assess how initialization techniques (e.g., naive random centroids vs. sophisticated seeding) influence convergence rates, cluster quality metrics (e.g., silhouette score, within-cluster sum of squares), and sensitivity to local optima.
+This project seeks to systematically benchmark and compare k-means implementations across the following aspects:
 
-By quantifying trade-offs between computational speed, scalability, and cluster accuracy, this work aims to provide actionable insights for researchers and practitioners in selecting optimal k-means configurations tailored to their data size, dimensionality, and domain requirements. The findings will contribute to a deeper understanding of how algorithmic choices and software ecosystems shape the practical utility of this foundational clustering method.
+- **Software ecosystem**: R (e.g., `stats`, `ClusterR`) vs Julia (e.g., `Clustering`)
+- **Algorithm variants**: Variants like Lloyd’s, Hartigan-Wong
+- **Initialization**: Random seeding, k-means++
+
+We evaluate the performance from three main metrics:
+
+- Clustering accuracy
+- Ratio of the Between-sum-of-squares / Total-sum-of-squares
+- Computational time
+
+This work aims to provide actionable insights for researchers and practitioners in selecting optimal k-means configurations tailored to their data size, dimensionality, and domain requirements. 

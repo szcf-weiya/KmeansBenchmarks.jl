@@ -6,7 +6,7 @@ using DataFrames
 plotly()
 
 # repeat two times
-nrep = 2
+nrep = 10
 res = [benchmark(arr_data, arr_methods) for _ in 1:nrep]
 
 df = DataFrame(hcat(repeat(repeat(collect(keys(arr_data)), inner=length(arr_methods)), outer = nrep),

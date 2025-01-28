@@ -7,6 +7,11 @@ function evaluate(x::AbstractMatrix, cl::AbstractVector, f::Function, paras = Di
     return acc, WSS, dt
 end
 
+"""
+    benchmark(arr_data::NamedTuple, arr_methods::NamedTuple)
+
+Run the benchmark experiments for all methods in `arr_methods` on each dataset in `arr_data`.
+"""
 function benchmark(arr_data::NamedTuple, arr_methods::NamedTuple)
     ndata = length(arr_data)
     nmethod = length(arr_methods)
