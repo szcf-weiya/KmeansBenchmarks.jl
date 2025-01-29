@@ -14,4 +14,8 @@ We evaluate the performance from three main metrics:
 - Ratio of the Between-sum-of-squares / Total-sum-of-squares
 - Computational time
 
+![Image](https://github.com/user-attachments/assets/5cce383c-5fd4-4133-83a4-18c2c2c17900)
+
+> **:dizzy: You can check the interactive Plotly figures at <https://hohoweiya.xyz/KmeansBenchmarks.jl>**
+
 This work aims to provide actionable insights for researchers and practitioners in selecting optimal k-means configurations tailored to their data size, dimensionality, and domain requirements. 
